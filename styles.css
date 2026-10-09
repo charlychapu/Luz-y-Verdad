@@ -1,0 +1,13 @@
+/* Configuración de fuentes y ajustes generales */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+h1, h2, h3, h4, .font-serif {
+    font-family: 'Merriweather', serif;
+}
+
+/* Transiciones suaves para botones */
+button, a {
+    transition: all 0.2s ease-in-out;
+}
