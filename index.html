@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luz y Verdad - Portal Cristiano</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para Íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#fcfaf7] text-stone-800 font-sans antialiased selection:bg-amber-200 selection:text-amber-900">
+
+    <!-- NAVEGACIÓN PRINCIPAL -->
+    <header class="sticky top-0 z-40 bg-[#fcfaf7]/90 backdrop-blur-md border-b border-stone-200/80">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <!-- Logo / Título -->
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-9 h-9 bg-amber-100 border border-amber-300/80 rounded-xl flex items-center justify-center text-amber-800">
+                    <i class="fa-solid fa-book-bible text-lg"></i>
+                </div>
+                <span class="font-serif font-bold text-lg text-amber-900 tracking-wide">Luz y Verdad</span>
+            </a>
+
+            <!-- Menú Escritorio -->
+            <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
+                <a href="#devocionales" class="hover:text-amber-800 transition">Devocionales</a>
+                <a href="#misiones" class="hover:text-amber-800 transition">Misiones</a>
+                <a href="#videos" class="hover:text-amber-800 transition">Estudios en Video</a>
+                <a href="#recursos" class="hover:text-amber-800 transition">Recursos PDF</a>
+                <a href="#oracion" class="hover:text-amber-800 transition">Oración</a>
+            </nav>
+
+            <!-- Botón Menú Móvil -->
+            <button id="mobile-menu-btn" class="md:hidden text-stone-600 hover:text-stone-900 text-xl p-2">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#f7f3ed] border-b border-stone-200 px-4 pt-2 pb-4 space-y-2">
+            <a href="#devocionales" class="block py-2 text-stone-700 hover:text-amber-800">Devocionales</a>
+            <a href="#misiones" class="block py-2 text-stone-700 hover:text-amber-800">Misiones</a>
+            <a href="#videos" class="block py-2 text-stone-700 hover:text-amber-800">Estudios en Video</a>
+            <a href="#recursos" class="block py-2 text-stone-700 hover:text-amber-800">Recursos PDF</a>
+            <a href="#oracion" class="block py-2 text-stone-700 hover:text-amber-800">Oración</a>
+        </div>
+    </header>
+
+    <!-- SECCIÓN HERO / BIENVENIDA -->
+    <section class="relative bg-gradient-to-b from-amber-100/60 to-[#fcfaf7] py-16 sm:py-24 border-b border-stone-200/60">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 border border-amber-300/80 text-amber-900 text-xs font-semibold uppercase tracking-wider mb-6">
+                <i class="fa-solid fa-sparkles text-amber-700"></i> Edificación Diaria
+            </span>
+            <h1 class="text-3xl sm:text-5xl font-serif font-bold text-stone-900 leading-tight mb-6">
+                Creciendo en la Palabra y Unidos en Comunión
+            </h1>
+            <p class="text-stone-600 text-base sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
+                Un espacio dedicado a compartir reflexiones bíblicas, reportes del campo misionero, recursos de estudio y motivos de oración.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="abrirDevocionalDestacado()" class="bg-amber-700 hover:bg-amber-800 text-white font-semibold px-6 py-3 rounded-xl transition shadow-md shadow-amber-900/10 flex items-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> Leer Devocional de hoy
+                </button>
+                <a href="#recursos" class="bg-white hover:bg-stone-50 text-stone-800 font-semibold px-6 py-3 rounded-xl border border-stone-300/80 transition flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-file-pdf text-red-700"></i> Explorar Recursos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-12 space-y-16">
+
+        <!-- 1. SECCIÓN DEVOCIONALES -->
+        <section id="devocionales" class="scroll-mt-20">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-amber-900">Devocionales</h2>
+                    <p class="text-stone-600 text-sm mt-1">Reflexiones diarias para alimentar tu fe.</p>
+                </div>
+                <!-- Filtros por Categoría -->
+                <div id="filtros-devocionales" class="flex flex-wrap gap-2">
+                    <button onclick="filtrarDevocionales('Todos', event)" class="bg-amber-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg border border-amber-800 transition">Todos</button>
+                    <button onclick="filtrarDevocionales('Fe', event)" class="bg-white text-stone-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-stone-300 hover:border-amber-700 transition">Fe</button>
+                    <button onclick="filtrarDevocionales('Familia', event)" class="bg-white text-stone-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-stone-300 hover:border-amber-700 transition">Familia</button>
+                    <button onclick="filtrarDevocionales('Vida Cristiana', event)" class="bg-white text-stone-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-stone-300 hover:border-amber-700 transition">Vida Cristiana</button>
+                </div>
+            </div>
+
+            <!-- Contenedor Dinámico -->
+            <div id="contenedor-devocionales" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+
+        <!-- 2. SECCIÓN MISIONES (Destacada en tono oscuro elegante) -->
+        <section id="misiones" class="scroll-mt-20 bg-stone-900 text-stone-100 rounded-3xl p-6 sm:p-10 shadow-lg">
+            <div class="mb-8">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">Campo Misionero</span>
+                <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-100 mt-3">Noticias de la Misión</h2>
+                <p class="text-stone-400 text-sm mt-1">Novedades y motivos de oración actualizados directamente desde el campo.</p>
+            </div>
+
+            <!-- Contenedor Dinámico -->
+            <div id="contenedor-misiones" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+
+        <!-- 3. SECCIÓN VIDEOS -->
+        <section id="videos" class="scroll-mt-20">
+            <div class="mb-8">
+                <h2 class="text-2xl sm:text-3xl font-serif font-bold text-amber-900">Estudios y Mensajes</h2>
+                <p class="text-stone-600 text-sm mt-1">Conferencias, predicaciones y enseñanzas en video.</p>
+            </div>
+
+            <!-- Contenedor Dinámico -->
+            <div id="contenedor-videos" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+
+        <!-- 4. SECCIÓN RECURSOS LITERARIOS (PDFs) -->
+        <section id="recursos" class="scroll-mt-20 bg-amber-100/40 border border-amber-200/70 rounded-3xl p-6 sm:p-10">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-serif font-bold text-stone-900">Recursos Literarios</h2>
+                    <p class="text-stone-600 text-sm mt-1">Descarga estudios bíblicos, guías y folletos en formato PDF.</p>
+                </div>
+                <!-- Buscador de PDFs -->
+                <div class="relative w-full sm:w-64">
+                    <input type="text" id="buscar-pdf" onkeyup="buscarPDFs()" placeholder="Buscar documento..." class="w-full bg-white border border-stone-300 rounded-xl pl-9 pr-4 py-2 text-xs text-stone-800 placeholder-stone-400 focus:outline-none focus:border-amber-700 transition">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+                </div>
+            </div>
+
+            <!-- Contenedor Dinámico -->
+            <div id="contenedor-pdfs" class="grid sm:grid-cols-2 lg:grid-cols-2 gap-4"></div>
+        </section>
+
+
+        <!-- 5. SECCIÓN PETICIONES DE ORACIÓN -->
+        <section id="oracion" class="scroll-mt-20 grid lg:grid-cols-3 gap-8 items-start">
+            <!-- Formulario para agregar peticiones -->
+            <div class="bg-white border border-stone-200/90 rounded-3xl p-6 shadow-sm">
+                <h3 class="text-xl font-serif font-bold text-amber-900 mb-2">Pide Oración</h3>
+                <p class="text-stone-500 text-xs mb-6 leading-relaxed">Comparte tu motivo para que la comunidad se una a orar contigo.</p>
+                
+                <form id="form-oracion" onsubmit="agregarPeticion(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Nombre o Iniciales</label>
+                        <input type="text" id="nombre-oracion" required placeholder="Ej. Juan P." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3.5 py-2 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-amber-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-700 mb-1">Motivo de Oración</label>
+                        <textarea id="motivo-oracion" required rows="3" placeholder="Escribe aquí tu petición..." class="w-full bg-stone-50 border border-stone-200 rounded-xl px-3.5 py-2 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-amber-700"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-amber-700 hover:bg-amber-800 text-white font-semibold py-2.5 rounded-xl text-sm transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-paper-plane"></i> Publicar Petición
+                    </button>
+                </form>
+            </div>
+
+            <!-- Lista de Peticiones -->
+            <div class="lg:col-span-2 bg-stone-100/60 border border-stone-200/80 rounded-3xl p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-xl font-serif font-bold text-stone-900">Motivos en la Comunidad</h3>
+                    <span id="contador-peticiones" class="text-xs font-semibold text-amber-900 bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-full">0 Peticiones</span>
+                </div>
+                <div id="contenedor-peticiones" class="space-y-3 max-h-[420px] overflow-y-auto pr-1"></div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- MODAL REUTILIZABLE (VENTANA EMERGENTE) -->
+    <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/60 backdrop-blur-sm animate-fade-in">
+        <div class="relative bg-white border border-stone-200 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto text-stone-800">
+            <!-- Botón Cerrar -->
+            <button onclick="cerrarModal()" class="absolute top-5 right-5 w-8 h-8 bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-800 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <!-- Contenido Inyectado por JS -->
+            <div id="modal-contenido"></div>
+        </div>
+    </div>
+
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-stone-200/60 border-t border-stone-300/60 py-8 text-center text-stone-600 text-xs">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p>© Luz y Verdad. Edificando la fe en comunidad.</p>
+            <p class="font-serif italic text-stone-700">"Tu palabra es una lámpara a mis pies y una luz en mi camino." — Salmo 119:105</p>
+        </div>
+    </footer>
+
+
+    <!-- CARGA DEL SCRIPT PRINCIPAL COMO MÓDULO -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
