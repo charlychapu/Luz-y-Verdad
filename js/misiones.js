@@ -23,7 +23,7 @@ async function cargarMisiones() {
     }
 }
 
-// Función auxiliar para obtener el valor de un campo sin importar mayúsculas, minúsculas o tildes
+// Función auxiliar para obtener el campo sin importar mayúsculas, minúsculas o tildes
 function getValor(objeto, ...nombresPosibles) {
     if (!objeto) return '';
     const keys = Object.keys(objeto);
@@ -49,16 +49,18 @@ function renderMisiones(lista) {
     }
 
     container.innerHTML = lista.map((m, index) => {
-        // Obtenemos cada campo reconociendo diferentes formas de escribir las columnas
         const misionero = getValor(m, 'misionero', 'misión', 'mision') || 'Misión ICE Los Robles';
         const lugar = getValor(m, 'lugar', 'ubicacion', 'ubicación', 'pais');
         const noticia = getValor(m, 'noticia', 'descripcion', 'descripción', 'resumen');
         const oraciones = getValor(m, 'oraciones', 'oracion', 'oración', 'motivos');
         const imagenUrl = getValor(m, 'imagen', 'foto', 'portada') || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
 
-        // Construimos la etiqueta de ubicación asegurando que existe valor
         const etiquetaUbicacion = lugar 
             ? `<span class="absolute top-3 left-3 bg-stone-900/90 backdrop-blur-sm text-stone-200 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-stone-700 flex items-center gap-1"><i class="fa-solid fa-location-dot text-amber-400"></i> ` + lugar + `</span>` 
+            : '';
+
+        const bloqueOracion = oraciones 
+            ? `<p class="text-stone-400 text-[11px] italic bg-stone-900/50 p-2 rounded-lg border border-stone-700/50 mt-3"><strong class="text-amber-400">Oración:</strong> ` + oraciones + `</p>` 
             : '';
 
         return `
@@ -72,7 +74,7 @@ function renderMisiones(lista) {
                         <p class="text-xs text-amber-400 font-medium mb-1.5"><i class="fa-solid fa-user-tie mr-1"></i> ${misionero}</p>
                         <h3 class="font-serif font-bold text-stone-100 text-base mb-2 leading-snug">${noticia ? noticia.substring(0, 70) + '...' : ''}</h3>
                         <p class="text-stone-300 text-xs leading-relaxed line-clamp-3 mb-2">${noticia}</p>
-                        ${oraciones ? `<p class="text-stone-400 text-[11px] italic bg-stone-900/50 p-2 rounded-lg border border-stone-700/50 mt-3"><strong class="text-amber-400">Oración:</strong> \${oraciones}</p>` : ''}
+                        ${bloqueOracion}
                     </div>
                 </div>
                 <div class="p-5 pt-0">
@@ -99,23 +101,31 @@ window.verMisionIndex = function(index) {
     const oraciones = getValor(m, 'oraciones', 'oracion', 'oración', 'motivos');
     const imagenUrl = getValor(m, 'imagen', 'foto', 'portada') || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
 
+    const etiquetaUbicacionModal = lugar 
+        ? `<span class="text-xs font-semibold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-md border border-amber-200">` + lugar + `</span>` 
+        : '';
+
+    const bloqueOracionModal = oraciones 
+        ? `
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-stone-800 mt-4">
+                <h4 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-hands-praying mr-1"></i> Motivos de Oración:</h4>
+                <p class="leading-relaxed">` + oraciones + `</p>
+            </div>
+        ` 
+        : '';
+
     contenido.innerHTML = `
         <div class="mb-4">
-            ${lugar ? `<span class="text-xs font-semibold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-md border border-amber-200">\${lugar}</span>` : ''}
+            ${etiquetaUbicacionModal}
             <h2 class="font-serif font-bold text-stone-900 text-2xl mt-2 mb-1">Reporte de ${misionero}</h2>
         </div>
         <div class="rounded-xl overflow-hidden mb-4 max-h-64 border border-stone-200 bg-stone-100">
             <img src="${imagenUrl}" alt="${misionero}" class="w-full h-full object-cover">
         </div>
-        <div class="prose prose-stone max-w-none text-stone-700 text-sm leading-relaxed whitespace-pre-line border-t border-stone-100 pt-4 mb-4">
+        <div class="prose prose-stone max-w-none text-stone-700 text-sm leading-relaxed whitespace-pre-line border-t border-stone-100 pt-4">
             ${noticia}
         </div>
-        ${oraciones ? `
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 text-xs text-stone-800">
-                <h4 class="font-bold text-amber-900 mb-1"><i class="fa-solid fa-hands-praying mr-1"></i> Motivos de Oración:</h4>
-                <p class="leading-relaxed">\${oraciones}</p>
-            </div>
-        ` : ''}
+        ${bloqueOracionModal}
     `;
     modal.classList.remove('hidden');
 };
