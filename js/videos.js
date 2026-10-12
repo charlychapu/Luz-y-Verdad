@@ -1,7 +1,7 @@
 // js/videos.js
 
 // URL de tu planilla OpenSheet
-const HOJA_VIDEOS = 'https://opensheet.elk.sh/TU_ID_DE_GOOGLE_SHEETS/Videos';
+const HOJA_VIDEOS = 'https://opensheet.elk.sh/1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA/Videos';
 
 export async function initVideos() {
     await cargarVideos();
