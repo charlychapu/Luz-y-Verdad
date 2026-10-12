@@ -1,7 +1,7 @@
 // js/devocionales.js
 
 // URL de tu planilla OpenSheet
-const HOJA_DEVOCIONALES = 'https://opensheet.elk.sh/TU_ID_DE_GOOGLE_SHEETS/Devocionales';
+const HOJA_DEVOCIONALES = 'https://opensheet.elk.sh/1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA/Devocionales';
 
 let devocionalesData = [];
 
