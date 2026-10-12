@@ -1,63 +1,89 @@
-const DEVOCIONALES = [
-    {
-        id: 1,
-        titulo: "La Fidelidad de Dios en Tiempos Difíciles",
-        pasaje: "Lamentaciones 3:22-23",
-        categoria: "Fe",
-        resumen: "Sus misericordias son nuevas cada mañana. Descubre cómo descansar en la fidelidad inconmovible de nuestro Padre celestial.",
-        contenido: "En medio de la aflicción, el profeta Jeremías declaró una de las verdades más consoladoras de la Escritura..."
-    }
-];
+// js/devocionales.js
 
-export function initDevocionales() {
-    renderDevocionales(DEVOCIONALES);
+// URL de tu planilla OpenSheet
+const HOJA_DEVOCIONALES = 'https://opensheet.elk.sh/TU_ID_DE_GOOGLE_SHEETS/Devocionales';
+
+let devocionalesData = [];
+
+export async function initDevocionales() {
+    await cargarDevocionales();
 }
 
-function renderDevocionales(lista = DEVOCIONALES) {
+async function cargarDevocionales() {
     const container = document.getElementById('contenedor-devocionales');
     if (!container) return;
-    container.innerHTML = lista.map(d => `
-        <div class="bg-white border border-amber-100 rounded-2xl p-6 shadow-sm hover:shadow-md transition flex flex-col justify-between">
+
+    try {
+        const response = await fetch(HOJA_DEVOCIONALES);
+        if (!response.ok) throw new Error("Error al obtener los devocionales");
+        devocionalesData = await response.json();
+        renderDevocionales(devocionalesData);
+    } catch (error) {
+        console.error("Error al cargar devocionales:", error);
+        container.innerHTML = `<p class="col-span-full text-center text-amber-800/60 text-sm py-6">No se pudieron cargar los devocionales en este momento.</p>`;
+    }
+}
+
+function renderDevocionales(lista) {
+    const container = document.getElementById('contenedor-devocionales');
+    if (!container) return;
+
+    if (!Array.isArray(lista) || lista.length === 0) {
+        container.innerHTML = `<p class="col-span-full text-center text-stone-500 text-sm py-6">No hay devocionales disponibles.</p>`;
+        return;
+    }
+
+    container.innerHTML = lista.map((d, index) => `
+        <article class="bg-white border border-stone-200/90 rounded-2xl p-5 shadow-sm hover:shadow-md hover:border-amber-500/40 transition flex flex-col justify-between">
             <div>
-                <div class="flex items-center justify-between mb-3">
-                    <span class="text-xs font-semibold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">${d.categoria}</span>
-                    <span class="text-xs text-slate-400 font-serif italic">${d.pasaje}</span>
+                <div class="flex items-center justify-between text-xs text-stone-500 mb-3">
+                    <span class="bg-amber-100 text-amber-900 font-semibold px-2.5 py-0.5 rounded-md border border-amber-200/60">${d.categoria || 'General'}</span>
+                    <span>${d.fecha || ''}</span>
                 </div>
-                <h3 class="text-lg font-serif font-bold text-slate-900 mb-2">${d.titulo}</h3>
-                <p class="text-slate-600 text-sm mb-4 leading-relaxed">${d.resumen}</p>
+                <h3 class="font-serif font-bold text-stone-900 text-lg mb-1 leading-snug">${d.titulo}</h3>
+                <p class="text-xs font-semibold text-amber-800 italic mb-3">${d.pasaje || ''}</p>
+                <p class="text-stone-600 text-xs leading-relaxed line-clamp-3 mb-4">${d.resumen || d.contenido}</p>
             </div>
-            <button onclick="verDevocional(${d.id})" class="text-amber-600 hover:text-amber-700 text-xs font-bold uppercase tracking-wider flex items-center gap-1">
-                Leer reflexión <i class="fa-solid fa-chevron-right text-[10px]"></i>
+            <button onclick="verDevocionalIndex(${index})" class="w-full bg-stone-100 hover:bg-amber-700 hover:text-white text-stone-800 text-xs font-semibold py-2 rounded-xl transition flex items-center justify-center gap-1.5 border border-stone-200 hover:border-amber-700">
+                <i class="fa-solid fa-book-open"></i> Leer Completo
             </button>
-        </div>
+        </article>
     `).join('');
 }
 
-window.filtrarDevocionales = function(cat, event) {
-    document.querySelectorAll('#filtros-devocionales button').forEach(b => {
-        b.classList.remove('bg-amber-600', 'text-white');
-        b.classList.add('bg-white', 'text-slate-600');
-    });
-    if (event && event.target) {
-        event.target.classList.remove('bg-white', 'text-slate-600');
-        event.target.classList.add('bg-amber-600', 'text-white');
-    }
-    renderDevocionales(cat === 'Todos' ? DEVOCIONALES : DEVOCIONALES.filter(d => d.categoria === cat));
-};
+window.verDevocionalIndex = function(index) {
+    const d = devocionalesData[index];
+    if (!d) return;
 
-window.verDevocional = function(id) {
-    const dev = DEVOCIONALES.find(d => d.id === id);
-    if (!dev) return;
     const modal = document.getElementById('modal');
-    document.getElementById('modal-contenido').innerHTML = `
-        <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">${dev.categoria}</span>
-        <h2 class="text-2xl font-serif font-bold text-slate-900 mt-3 mb-1">${dev.titulo}</h2>
-        <p class="text-amber-800 font-serif italic text-sm mb-4">${dev.pasaje}</p>
-        <div class="text-slate-700 text-sm leading-relaxed space-y-3"><p>${dev.contenido}</p></div>
+    const contenido = document.getElementById('modal-contenido');
+    if (!modal || !contenido) return;
+
+    contenido.innerHTML = `
+        <div class="mb-4">
+            <span class="text-xs font-semibold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-md border border-amber-200/60">${d.categoria || 'General'}</span>
+            <h2 class="font-serif font-bold text-stone-900 text-2xl mt-2 mb-1">${d.titulo}</h2>
+            <p class="text-xs text-stone-500">${d.fecha || ''} • <span class="font-semibold text-amber-800">${d.pasaje || ''}</span></p>
+        </div>
+        <div class="prose prose-stone max-w-none text-stone-700 text-sm leading-relaxed whitespace-pre-line border-t border-stone-100 pt-4">
+            ${d.contenido}
+        </div>
     `;
     modal.classList.remove('hidden');
 };
 
-window.abrirDevocionalDestacado = function() {
-    window.verDevocional(1);
+window.filtrarDevocionales = function(cat, event) {
+    if (event) {
+        document.querySelectorAll('#filtros-devocionales button').forEach(b => {
+            b.className = 'bg-white text-stone-700 text-xs font-medium px-3 py-1.5 rounded-lg border border-stone-300 hover:border-amber-700 transition';
+        });
+        event.target.className = 'bg-amber-700 text-white text-xs font-medium px-3 py-1.5 rounded-lg border border-amber-800 transition';
+    }
+
+    if (cat === 'Todos') {
+        renderDevocionales(devocionalesData);
+    } else {
+        const filtrados = devocionalesData.filter(d => (d.categoria || '').toLowerCase() === cat.toLowerCase());
+        renderDevocionales(filtrados);
+    }
 };
