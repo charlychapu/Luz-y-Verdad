@@ -1,6 +1,5 @@
 // js/misiones.js
 
-// URL de tu planilla OpenSheet (reemplaza con tu ID real si hiciera falta)
 const HOJA_MISIONES = 'https://opensheet.elk.sh/1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA/Misiones';
 
 let misionesData = [];
@@ -34,13 +33,10 @@ function renderMisiones(lista) {
     }
 
     container.innerHTML = lista.map((m, index) => {
-        // Leemos exactamente tus columnas: misionero, lugar, noticia, oraciones
         const misionero = m.misionero || 'Misión ICE Los Robles';
         const lugar = m.lugar || '';
         const noticia = m.noticia || '';
         const oraciones = m.oraciones || '';
-        
-        // Imagen por defecto institucional
         const imagenUrl = m.imagen || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
 
         return `
