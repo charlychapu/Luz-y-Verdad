@@ -23,6 +23,22 @@ async function cargarMisiones() {
     }
 }
 
+// Función auxiliar para obtener el valor de un campo sin importar mayúsculas, minúsculas o tildes
+function getValor(objeto, ...nombresPosibles) {
+    if (!objeto) return '';
+    const keys = Object.keys(objeto);
+    for (const posible of nombresPosibles) {
+        const keyEncontrada = keys.find(k => 
+            k.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() === 
+            posible.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
+        );
+        if (keyEncontrada && objeto[keyEncontrada]) {
+            return objeto[keyEncontrada];
+        }
+    }
+    return '';
+}
+
 function renderMisiones(lista) {
     const container = document.getElementById('contenedor-misiones');
     if (!container) return;
@@ -33,26 +49,28 @@ function renderMisiones(lista) {
     }
 
     container.innerHTML = lista.map((m, index) => {
-        const misionero = m.misionero || 'Misión ICE Los Robles';
-        const lugar = m.lugar || '';
-        const noticia = m.noticia || '';
-        const oraciones = m.oraciones || '';
-        const imagenUrl = m.imagen || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
+        // Obtenemos cada campo reconociendo diferentes formas de escribir las columnas
+        const misionero = getValor(m, 'misionero', 'misión', 'mision') || 'Misión ICE Los Robles';
+        const lugar = getValor(m, 'lugar', 'ubicacion', 'ubicación', 'pais');
+        const noticia = getValor(m, 'noticia', 'descripcion', 'descripción', 'resumen');
+        const oraciones = getValor(m, 'oraciones', 'oracion', 'oración', 'motivos');
+        const imagenUrl = getValor(m, 'imagen', 'foto', 'portada') || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
+
+        // Construimos la etiqueta de ubicación asegurando que existe valor
+        const etiquetaUbicacion = lugar 
+            ? `<span class="absolute top-3 left-3 bg-stone-900/90 backdrop-blur-sm text-stone-200 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-stone-700 flex items-center gap-1"><i class="fa-solid fa-location-dot text-amber-400"></i> ` + lugar + `</span>` 
+            : '';
 
         return `
             <article class="bg-stone-800 border border-stone-700/80 rounded-2xl overflow-hidden shadow-md hover:border-amber-500/50 transition flex flex-col justify-between group">
                 <div>
                     <div class="relative h-44 w-full overflow-hidden bg-stone-950">
                         <img src="${imagenUrl}" alt="${misionero}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        ${lugar ? `
-                            <span class="absolute top-3 left-3 bg-stone-900/90 backdrop-blur-sm text-stone-200 text-[11px] font-semibold px-2.5 py-1 rounded-md border border-stone-700 flex items-center gap-1">
-                                <i class="fa-solid fa-location-dot text-amber-400"></i> \${lugar}
-                            </span>
-                        ` : ''}
+                        ${etiquetaUbicacion}
                     </div>
                     <div class="p-5">
                         <p class="text-xs text-amber-400 font-medium mb-1.5"><i class="fa-solid fa-user-tie mr-1"></i> ${misionero}</p>
-                        <h3 class="font-serif font-bold text-stone-100 text-base mb-2 leading-snug">${noticia.substring(0, 70)}...</h3>
+                        <h3 class="font-serif font-bold text-stone-100 text-base mb-2 leading-snug">${noticia ? noticia.substring(0, 70) + '...' : ''}</h3>
                         <p class="text-stone-300 text-xs leading-relaxed line-clamp-3 mb-2">${noticia}</p>
                         ${oraciones ? `<p class="text-stone-400 text-[11px] italic bg-stone-900/50 p-2 rounded-lg border border-stone-700/50 mt-3"><strong class="text-amber-400">Oración:</strong> \${oraciones}</p>` : ''}
                     </div>
@@ -75,11 +93,11 @@ window.verMisionIndex = function(index) {
     const contenido = document.getElementById('modal-contenido');
     if (!modal || !contenido) return;
 
-    const misionero = m.misionero || 'Misión ICE Los Robles';
-    const lugar = m.lugar || '';
-    const noticia = m.noticia || '';
-    const oraciones = m.oraciones || '';
-    const imagenUrl = m.imagen || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
+    const misionero = getValor(m, 'misionero', 'misión', 'mision') || 'Misión ICE Los Robles';
+    const lugar = getValor(m, 'lugar', 'ubicacion', 'ubicación', 'pais');
+    const noticia = getValor(m, 'noticia', 'descripcion', 'descripción', 'resumen');
+    const oraciones = getValor(m, 'oraciones', 'oracion', 'oración', 'motivos');
+    const imagenUrl = getValor(m, 'imagen', 'foto', 'portada') || 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=800&auto=format&fit=crop';
 
     contenido.innerHTML = `
         <div class="mb-4">
