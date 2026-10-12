@@ -13,7 +13,7 @@ export async function initMisiones() {
     }
 
     try {
-            const url = `https://opensheet.elk.sh/1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA/Hoja%201`;
+            const url = `https://opensheet.elk.sh/1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA/Misiones`;
             const respuesta = await fetch(url); 
         if (!respuesta.ok) {
             throw new Error(`Error en la respuesta: ${respuesta.status}`);
