@@ -2,7 +2,7 @@
 
 // ID extraído de tu planilla "Misiones - Luz y Verdad"
 const GOOGLE_SHEETS_ID = "1B6O8kShJhBjhEFWZz5BwD2buvl2-t7r8cc4vtmJuGRA";
-const NOMBRE_HOJA = "1";
+const NOMBRE_HOJA = "Misiones";
 
 let MISIONES = [];
 
